@@ -2,6 +2,7 @@ package main
 
 import (
   "encoding/csv"
+  "path/filepath"
   "fmt"
   "os"
 )
@@ -13,14 +14,19 @@ func check(e error) {
 }
 
 func main() {
-  file, err := os.Open("../data/numbers.csv")
+  // Get all the data files.
+  all_files, err := filepath.Glob("../data/*.csv")
   check(err)
-  defer file.Close()
+  for _, filename := range all_files {
+    file, err := os.Open(filename)
+    check(err)
+    defer file.Close()
 
-  lines, err := csv.NewReader(file).ReadAll()
-  check(err)
-  fmt.Println("The number of entries are", len(lines))
-  for _, line := range lines{
-    fmt.Println(line[0] + " is" + line[1])
+    lines, err := csv.NewReader(file).ReadAll()
+    check(err)
+    fmt.Println("The number of entries are", len(lines))
+    for _, line := range lines{
+      fmt.Println(line[0] + " is" + line[1])
+    }
   }
 }
