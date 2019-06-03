@@ -13,6 +13,11 @@ func main() {
   fmt.Println("I have", number_of_words, "words!")
   var command string
   for command != "exit" {
-    command = cli.GetCommand()
+    switch command = cli.GetCommand(); command {
+    case "list files":
+      file_operations.ListFiles(file_glob)
+    case "list words":
+      file_operations.ListWords(file_glob)
+    }
   }
 }
