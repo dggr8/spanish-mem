@@ -3,10 +3,17 @@ package file_operations
 import (
 	"encoding/csv"
 	"fmt"
-  "path/filepath"
+  	"path/filepath"
 	"os"
 	"strings"
 )
+
+const glob_path string = "../data/*.csv"
+
+type WordPair struct {
+	English string
+	Spanish string
+}
 
 func check(e error) {
 	if e != nil {
@@ -15,7 +22,7 @@ func check(e error) {
 }
 
 
-func LoadFiles(glob_path string) int64 {
+func LoadFiles() int64 {
 	// Get all the data files from the glob path.
 	all_files, err := filepath.Glob(glob_path)
 	check(err)
@@ -33,7 +40,7 @@ func LoadFiles(glob_path string) int64 {
 	return number_of_words
 }
 
-func ListFiles(glob_path string) {
+func ListFiles() {
 	// Print a list of files that tests use.
 	all_files, err := filepath.Glob(glob_path)
 	check(err)
@@ -50,7 +57,7 @@ func formatFilename(file_path string) string {
 	return csvfile[:len(csvfile)-4]
 }
 
-func ListWords(glob_path string) {
+func ListWords() {
 	// Print a list of words that tests use.
 	all_files, err := filepath.Glob(glob_path)
 	check(err)
@@ -69,4 +76,23 @@ func ListWords(glob_path string) {
 		}
 	}
 	fmt.Println("------------------------------------")
+}
+
+func GetWords() []WordPair {
+	var word_list []WordPair
+	all_files, err := filepath.Glob(glob_path)
+	check(err)
+	fmt.Println("------------------------------------")
+	for _, filepath := range all_files {
+		file, err := os.Open(filepath)
+		check(err)
+		defer file.Close()
+
+		lines, err := csv.NewReader(file).ReadAll()
+		check(err)
+		for _, line := range lines {
+			word_list = append(word_list, WordPair{line[0], line[1][1:]})
+		}
+	}
+	return word_list
 }

@@ -29,3 +29,11 @@ func GetCommand() string {
 		return ""
 	}
 }
+
+func GetAnswer(question string) string{
+	reader := bufio.NewReader(os.Stdin)
+	fmt.Print(question, "->")
+	text, _ := reader.ReadString('\n')
+	text = strings.Replace(text, "\n", "", -1)
+	return text
+}
