@@ -20,6 +20,8 @@ func main() {
       file_operations.ListWords()
     case "train spanish":
       language_test.TestSpanish()
+    case "train english":
+      language_test.TestEnglish()
     }
   }
 }

@@ -17,9 +17,9 @@ var list_of_commands = map[string]bool{
 }
 
 func GetCommand() string {
-	reader := bufio.NewReader(os.Stdin)
 	fmt.Println("What do you want to do now?")
 	fmt.Print(">")
+	reader := bufio.NewReader(os.Stdin)
 	text, _ := reader.ReadString('\n')
 	text = strings.Replace(text, "\n", "", -1)
 	if list_of_commands[text] == true {
@@ -31,9 +31,16 @@ func GetCommand() string {
 }
 
 func GetAnswer(question string) string{
-	reader := bufio.NewReader(os.Stdin)
 	fmt.Print(question, "->")
+	reader := bufio.NewReader(os.Stdin)
 	text, _ := reader.ReadString('\n')
 	text = strings.Replace(text, "\n", "", -1)
 	return text
+}
+
+func GetInt(question string) int{
+	fmt.Print(question, "->")
+	var number int
+	fmt.Scanf("%d", &number)
+	return number
 }
