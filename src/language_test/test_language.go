@@ -6,11 +6,17 @@ import (
   	"github.com/dggr8/spanish-mem/src/cli"
 	"github.com/dggr8/spanish-mem/src/file_operations"
 	"math/rand"
+	"time"
 )
+
+func SeedWithTime() {
+	rand.Seed(time.Now().UTC().UnixNano())
+}
 
 func TestSpanish() {
 	correct_count := 0
 	word_list := file_operations.GetWords()
+	SeedWithTime()
 	train_count := cli.GetInt("How many words do you want to train")
 	fmt.Println("Translate these words to spanish:")
 	for i := 0; i < train_count; i++ {
