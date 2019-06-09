@@ -5,6 +5,7 @@ import (
 	"github.com/agnivade/levenshtein"
   	"github.com/dggr8/spanish-mem/src/cli"
 	"github.com/dggr8/spanish-mem/src/file_operations"
+  	"github.com/dggr8/spanish-mem/src/results"
 	"math/rand"
 	"time"
 )
@@ -31,11 +32,13 @@ func TestSpanish() {
 		}
 	}
 	fmt.Printf("%v correct out of %v\n", correct_count, train_count)
+	results.RecordResult(correct_count, train_count, "spanish")
 }
 
 func TestEnglish() {
 	correct_count := 0
 	word_list := file_operations.GetWords()
+	SeedWithTime()
 	train_count := cli.GetInt("How many words so you want to train")
 	fmt.Println("Translate these words to english:")
 	for i := 0; i < train_count; i++ {
@@ -49,5 +52,6 @@ func TestEnglish() {
 			fmt.Printf("Nah! It is \"%v\".\n", word_pair.English)
 		}
 	}
-	fmt.Printf("%v correct out of %v", correct_count, len(word_list))
+	fmt.Printf("%v correct out of %v\n", correct_count, train_count)
+	results.RecordResult(correct_count, train_count, "english")
 }
