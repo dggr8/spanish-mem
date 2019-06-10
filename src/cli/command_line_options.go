@@ -12,7 +12,7 @@ var list_of_commands = map[string]bool{
 	"list words": true,
 	"train spanish": true,
 	"train english": true,
-	"results": true,
+	"print results": true,
 	"exit": true,
 }
 
