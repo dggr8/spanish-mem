@@ -3,12 +3,12 @@ package file_operations
 import (
 	"encoding/csv"
 	"fmt"
-  	"path/filepath"
 	"os"
+	"path/filepath"
 	"strings"
 )
 
-const glob_path string = "../data/*.csv"
+const globPath string = "../data/*.csv"
 
 type WordPair struct {
 	English string
@@ -17,14 +17,13 @@ type WordPair struct {
 
 func check(e error) {
 	if e != nil {
-	  panic(e)
+		panic(e)
 	}
 }
 
-
 func LoadFiles() int64 {
 	// Get all the data files from the glob path.
-	all_files, err := filepath.Glob(glob_path)
+	all_files, err := filepath.Glob(globPath)
 	check(err)
 	var number_of_words int64
 	for _, filename := range all_files {
@@ -42,7 +41,7 @@ func LoadFiles() int64 {
 
 func ListFiles() {
 	// Print a list of files that tests use.
-	all_files, err := filepath.Glob(glob_path)
+	all_files, err := filepath.Glob(globPath)
 	check(err)
 	fmt.Println("------------------------------------")
 	for _, filepath := range all_files {
@@ -59,11 +58,11 @@ func formatFilename(file_path string) string {
 
 func ListWords() {
 	// Print a list of words that tests use.
-	all_files, err := filepath.Glob(glob_path)
+	allFiles, err := filepath.Glob(globPath)
 	check(err)
 	fmt.Println("------------------------------------")
 	count := 1
-	for _, filepath := range all_files {
+	for _, filepath := range allFiles {
 		file, err := os.Open(filepath)
 		check(err)
 		defer file.Close()
@@ -80,7 +79,7 @@ func ListWords() {
 
 func GetWords() []WordPair {
 	var word_list []WordPair
-	all_files, err := filepath.Glob(glob_path)
+	all_files, err := filepath.Glob(globPath)
 	check(err)
 	fmt.Println("------------------------------------")
 	for _, filepath := range all_files {
