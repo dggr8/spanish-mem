@@ -12,6 +12,7 @@ func main() {
 	// Get all the data files.
 	number_of_words := file_operations.LoadFiles()
 	fmt.Println("I have", number_of_words, "words!")
+	language_test.SeedWithTime()
 	var command string
 	for command != "exit" {
 		switch command = cli.GetCommand(cli.Stdin, cli.Stdout); command {
