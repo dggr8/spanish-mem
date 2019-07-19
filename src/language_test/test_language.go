@@ -2,12 +2,13 @@ package language_test
 
 import (
 	"fmt"
-	"github.com/agnivade/levenshtein"
-  	"github.com/dggr8/spanish-mem/src/cli"
-	"github.com/dggr8/spanish-mem/src/file_operations"
-  	"github.com/dggr8/spanish-mem/src/results"
 	"math/rand"
 	"time"
+
+	"github.com/agnivade/levenshtein"
+	"github.com/dggr8/spanish-mem/src/cli"
+	"github.com/dggr8/spanish-mem/src/file_operations"
+	"github.com/dggr8/spanish-mem/src/results"
 )
 
 func SeedWithTime() {
@@ -18,13 +19,18 @@ func TestSpanish() {
 	correct_count := 0
 	word_list := file_operations.GetWords()
 	SeedWithTime()
-	train_count := cli.GetInt("How many words do you want to train")
+	train_count, err := cli.GetInt(
+		cli.Stdin, cli.Stdout, "How many words do you want to train")
+	for err != nil {
+		train_count, err = cli.GetInt(
+			cli.Stdin, cli.Stdout, "Oops.How many words so you want to train")
+	}
 	fmt.Println("Translate these words to spanish:")
 	for i := 0; i < train_count; i++ {
 		word_pair := word_list[rand.Intn(len(word_list))]
-		answer := cli.GetAnswer(word_pair.English)
+		answer := cli.GetAnswer(cli.Stdin, cli.Stdout, word_pair.English)
 		distance := levenshtein.ComputeDistance(answer, word_pair.Spanish)
-		if 2 * float64(distance)/float64(len(answer) + len(word_pair.Spanish)) < 0.1 {
+		if 2*float64(distance)/float64(len(answer)+len(word_pair.Spanish)) < 0.1 {
 			fmt.Println("Correct!")
 			correct_count = correct_count + 1
 		} else {
@@ -39,13 +45,18 @@ func TestEnglish() {
 	correct_count := 0
 	word_list := file_operations.GetWords()
 	SeedWithTime()
-	train_count := cli.GetInt("How many words so you want to train")
+	train_count, err := cli.GetInt(
+		cli.Stdin, cli.Stdout, "How many words so you want to train")
+	for err != nil {
+		train_count, err = cli.GetInt(
+			cli.Stdin, cli.Stdout, "Oops.How many words so you want to train")
+	}
 	fmt.Println("Translate these words to english:")
 	for i := 0; i < train_count; i++ {
 		word_pair := word_list[rand.Intn(len(word_list))]
-		answer := cli.GetAnswer(word_pair.Spanish)
+		answer := cli.GetAnswer(cli.Stdin, cli.Stdout, word_pair.Spanish)
 		distance := levenshtein.ComputeDistance(answer, word_pair.English)
-		if 2 * float64(distance)/float64(len(answer) + len(word_pair.English)) < 0.1 {
+		if 2*float64(distance)/float64(len(answer)+len(word_pair.English)) < 0.1 {
 			fmt.Println("Correct!")
 			correct_count = correct_count + 1
 		} else {

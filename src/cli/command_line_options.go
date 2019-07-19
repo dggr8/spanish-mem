@@ -36,17 +36,20 @@ func GetCommand(rd io.Reader, wr io.Writer) string {
 	}
 }
 
-func GetAnswer(question string) string {
-	fmt.Print(question, "->")
-	reader := bufio.NewReader(os.Stdin)
+func GetAnswer(rd io.Reader, wr io.Writer, question string) string {
+	fmt.Fprint(wr, question, "->")
+	reader := bufio.NewReader(rd)
 	text, _ := reader.ReadString('\n')
 	text = strings.Replace(text, "\n", "", -1)
 	return text
 }
 
-func GetInt(question string) int {
-	fmt.Print(question, "->")
+func GetInt(rd io.Reader, wr io.Writer, question string) (int, error) {
+	fmt.Fprint(wr, question, "->")
 	var number int
-	fmt.Scanf("%d", &number)
-	return number
+	_, err := fmt.Fscanf(rd, "%d", &number)
+	if err != nil {
+		return 0, err
+	}
+	return number, nil
 }
