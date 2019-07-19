@@ -23,10 +23,10 @@ func check(e error) {
 
 func LoadFiles() int64 {
 	// Get all the data files from the glob path.
-	all_files, err := filepath.Glob(globPath)
+	allFiles, err := filepath.Glob(globPath)
 	check(err)
 	var number_of_words int64
-	for _, filename := range all_files {
+	for _, filename := range allFiles {
 		file, err := os.Open(filename)
 		check(err)
 		defer file.Close()
@@ -41,10 +41,10 @@ func LoadFiles() int64 {
 
 func ListFiles() {
 	// Print a list of files that tests use.
-	all_files, err := filepath.Glob(globPath)
+	allFiles, err := filepath.Glob(globPath)
 	check(err)
 	fmt.Println("------------------------------------")
-	for _, filepath := range all_files {
+	for _, filepath := range allFiles {
 		fmt.Println(formatFilename(filepath))
 	}
 	fmt.Println("------------------------------------")
@@ -79,10 +79,10 @@ func ListWords() {
 
 func GetWords() []WordPair {
 	var word_list []WordPair
-	all_files, err := filepath.Glob(globPath)
+	allFiles, err := filepath.Glob(globPath)
 	check(err)
 	fmt.Println("------------------------------------")
-	for _, filepath := range all_files {
+	for _, filepath := range allFiles {
 		file, err := os.Open(filepath)
 		check(err)
 		defer file.Close()
