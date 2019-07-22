@@ -16,13 +16,15 @@ func SeedWithTime() {
 }
 
 func TestSpanish() {
-	correct_count := 0
-	train_count, err := cli.GetInt(
+	correctAnswers := 0
+	trainCount, err := cli.GetInt(
 		cli.Stdin, cli.Stdout, "How many words do you want to train")
-	for err != nil || train_count <= 0 {
-		train_count, err = cli.GetInt(
-			cli.Stdin, cli.Stdout, "Oops.How many words so you want to train")
+	for err != nil || trainCount <= 0 {
+		trainCount, err = cli.GetInt(
+			cli.Stdin, cli.Stdout, "Oops.How many words do you want to train")
 	}
+	LoopCtr := trainCount
+
 	fmt.Println("Translate these words to spanish:")
 	for englishWord, SpanishList := range file_operations.EnglishToSpanish {
 		answer := cli.GetAnswer(cli.Stdin, cli.Stdout, englishWord)
@@ -33,29 +35,30 @@ func TestSpanish() {
 		distance := MinDistance(answer, SpanishList)
 		if distance == 0 {
 			fmt.Println("Correct!")
-			correct_count = correct_count + 1
+			correctAnswers = correctAnswers + 1
 		} else {
-			fmt.Printf("Nah! It is %q.", SpanishList[0])
-			fmt.Printf("The distance was %d.", distance)
+			fmt.Printf("Nah! It is one of \"%v\".\n", SpanishList)
 		}
 
-		train_count--
-		if train_count == 0 {
+		LoopCtr--
+		if LoopCtr == 0 {
 			break
 		}
 	}
-	fmt.Printf("%v correct out of %v\n", correct_count, train_count)
-	results.RecordResult(correct_count, train_count, "spanish")
+	fmt.Printf("%v correct out of %v\n", correctAnswers, trainCount)
+	results.RecordResult(correctAnswers, trainCount, "spanish")
 }
 
 func TestEnglish() {
-	correct_count := 0
-	train_count, err := cli.GetInt(
-		cli.Stdin, cli.Stdout, "How many words so you want to train")
+	correctAnswers := 0
+	trainCount, err := cli.GetInt(
+		cli.Stdin, cli.Stdout, "How many words do you want to train")
 	for err != nil {
-		train_count, err = cli.GetInt(
-			cli.Stdin, cli.Stdout, "Oops.How many words so you want to train")
+		trainCount, err = cli.GetInt(
+			cli.Stdin, cli.Stdout, "Oops.How many words do you want to train")
 	}
+	LoopCtr := trainCount
+
 	fmt.Println("Translate these words to english:")
 	for spanishWord, EnglishList := range file_operations.SpanishToEnglish {
 		answer := cli.GetAnswer(cli.Stdin, cli.Stdout, spanishWord)
@@ -66,19 +69,18 @@ func TestEnglish() {
 		distance := MinDistance(answer, EnglishList)
 		if distance == 0 {
 			fmt.Println("Correct!")
-			correct_count = correct_count + 1
+			correctAnswers = correctAnswers + 1
 		} else {
 			fmt.Printf("Nah! It is one of \"%v\".\n", EnglishList)
-			fmt.Printf("The distance was %d.", distance)
 		}
 
-		train_count--
-		if train_count == 0 {
+		LoopCtr--
+		if LoopCtr == 0 {
 			break
 		}
 	}
-	fmt.Printf("%v correct out of %v\n", correct_count, train_count)
-	results.RecordResult(correct_count, train_count, "english")
+	fmt.Printf("%v correct out of %v\n", correctAnswers, trainCount)
+	results.RecordResult(correctAnswers, trainCount, "english")
 }
 
 func MinDistance(word string, comparingWords []string) (min int) {

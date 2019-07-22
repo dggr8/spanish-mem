@@ -14,8 +14,6 @@ var (
 )
 
 var list_of_commands = map[string]bool{
-	"list files":    true,
-	"list words":    true,
 	"train spanish": true,
 	"train english": true,
 	"print results": true,
