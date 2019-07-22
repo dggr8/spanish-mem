@@ -8,7 +8,7 @@ import (
 	"strings"
 )
 
-const globPath string = "../data/*.csv"
+const globPath string = "../data/manually-curated/*.csv"
 
 type WordPair struct {
 	English string
