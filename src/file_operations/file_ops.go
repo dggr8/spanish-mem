@@ -2,7 +2,6 @@ package file_operations
 
 import (
 	"encoding/csv"
-	"fmt"
 	"os"
 	"path/filepath"
 )
@@ -21,7 +20,6 @@ func check(e error) {
 func GetWords(globPath string) {
 	allFiles, err := filepath.Glob(globPath)
 	check(err)
-	fmt.Println("------------------------------------")
 	for _, filepath := range allFiles {
 		file, err := os.Open(filepath)
 		check(err)
