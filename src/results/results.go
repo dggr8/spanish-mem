@@ -13,21 +13,15 @@ type TestResults struct {
 }
 
 type TestResult struct {
-	Correct  int    `json:"correct"`
-	Attempts int    `json:"attempts"`
-	Train    string `json:"train"`
+	Correct   int       `json:"correct"`
+	Attempts  int       `json:"attempts"`
+	Train     string    `json:"train"`
 	Timestamp time.Time `json:"timestamp"`
 }
 
-const result_filepath string = "../data/results.json"
+const ResultFilePath string = "../data/results.json"
 
-func RecordResult(correct int, attempts int, train string) {
-	this_result := TestResult{
-		Correct: correct,
-		Attempts: attempts,
-		Train: train,
-		Timestamp: time.Now(),
-	}
+func RecordResult(this_result TestResult, result_filepath string) {
 
 	jsonFile, err := os.Open(result_filepath)
 	if err != nil {

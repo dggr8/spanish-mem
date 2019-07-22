@@ -46,7 +46,12 @@ func TestSpanish() {
 		}
 	}
 	fmt.Printf("%v correct out of %v\n", correctAnswers, trainCount)
-	results.RecordResult(correctAnswers, trainCount, "spanish")
+	results.RecordResult(results.TestResult{
+		Correct:   correctAnswers,
+		Attempts:  trainCount,
+		Train:     "spanish",
+		Timestamp: time.Now(),
+	}, results.ResultFilePath)
 }
 
 func TestEnglish() {
@@ -80,7 +85,12 @@ func TestEnglish() {
 		}
 	}
 	fmt.Printf("%v correct out of %v\n", correctAnswers, trainCount)
-	results.RecordResult(correctAnswers, trainCount, "english")
+	results.RecordResult(results.TestResult{
+		Correct:   correctAnswers,
+		Attempts:  trainCount,
+		Train:     "english",
+		Timestamp: time.Now(),
+	}, results.ResultFilePath)
 }
 
 func MinDistance(word string, comparingWords []string) (min int) {
