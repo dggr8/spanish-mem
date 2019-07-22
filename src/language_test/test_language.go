@@ -17,28 +17,31 @@ func SeedWithTime() {
 
 func TestSpanish() {
 	correct_count := 0
-	word_list := file_operations.GetWords()
 	train_count, err := cli.GetInt(
 		cli.Stdin, cli.Stdout, "How many words do you want to train")
-	for err != nil {
+	for err != nil || train_count <= 0 {
 		train_count, err = cli.GetInt(
 			cli.Stdin, cli.Stdout, "Oops.How many words so you want to train")
 	}
 	fmt.Println("Translate these words to spanish:")
-	for i := 0; i < train_count; i++ {
-		word_pair := word_list[rand.Intn(len(word_list))]
-		answer := cli.GetAnswer(cli.Stdin, cli.Stdout, word_pair.English)
+	for englishWord, SpanishList := range file_operations.EnglishToSpanish {
+		answer := cli.GetAnswer(cli.Stdin, cli.Stdout, englishWord)
 		if answer == "" {
-			i--
-			fmt.Printf("It is \"%v\".\n", word_pair.Spanish)
+			fmt.Printf("It is one of \"%v\".\n", SpanishList)
 			continue
 		}
-		distance := levenshtein.ComputeDistance(answer, word_pair.Spanish)
-		if 2*float64(distance)/float64(len(answer)+len(word_pair.Spanish)) < 0.1 {
+		distance := MinDistance(answer, SpanishList)
+		if distance == 0 {
 			fmt.Println("Correct!")
 			correct_count = correct_count + 1
 		} else {
-			fmt.Printf("Nah! It is \"%v\".\n", word_pair.Spanish)
+			fmt.Printf("Nah! It is %q.", SpanishList[0])
+			fmt.Printf("The distance was %d.", distance)
+		}
+
+		train_count--
+		if train_count == 0 {
+			break
 		}
 	}
 	fmt.Printf("%v correct out of %v\n", correct_count, train_count)
@@ -47,7 +50,6 @@ func TestSpanish() {
 
 func TestEnglish() {
 	correct_count := 0
-	word_list := file_operations.GetWords()
 	train_count, err := cli.GetInt(
 		cli.Stdin, cli.Stdout, "How many words so you want to train")
 	for err != nil {
@@ -55,22 +57,37 @@ func TestEnglish() {
 			cli.Stdin, cli.Stdout, "Oops.How many words so you want to train")
 	}
 	fmt.Println("Translate these words to english:")
-	for i := 0; i < train_count; i++ {
-		word_pair := word_list[rand.Intn(len(word_list))]
-		answer := cli.GetAnswer(cli.Stdin, cli.Stdout, word_pair.Spanish)
+	for spanishWord, EnglishList := range file_operations.SpanishToEnglish {
+		answer := cli.GetAnswer(cli.Stdin, cli.Stdout, spanishWord)
 		if answer == "" {
-			i--
-			fmt.Printf("It is \"%v\".\n", word_pair.English)
+			fmt.Printf("It is one of \"%v\".\n", EnglishList)
 			continue
 		}
-		distance := levenshtein.ComputeDistance(answer, word_pair.English)
-		if 2*float64(distance)/float64(len(answer)+len(word_pair.English)) < 0.1 {
+		distance := MinDistance(answer, EnglishList)
+		if distance == 0 {
 			fmt.Println("Correct!")
 			correct_count = correct_count + 1
 		} else {
-			fmt.Printf("Nah! It is \"%v\".\n", word_pair.English)
+			fmt.Printf("Nah! It is one of \"%v\".\n", EnglishList)
+			fmt.Printf("The distance was %d.", distance)
+		}
+
+		train_count--
+		if train_count == 0 {
+			break
 		}
 	}
 	fmt.Printf("%v correct out of %v\n", correct_count, train_count)
 	results.RecordResult(correct_count, train_count, "english")
+}
+
+func MinDistance(word string, comparingWords []string) (min int) {
+	min = len(word)
+	for _, compareWord := range comparingWords {
+		distance := levenshtein.ComputeDistance(word, compareWord)
+		if min > distance {
+			min = distance
+		}
+	}
+	return
 }

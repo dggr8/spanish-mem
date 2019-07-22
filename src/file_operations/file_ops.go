@@ -8,12 +8,16 @@ import (
 	"strings"
 )
 
-const globPath string = "../data/manually-curated/*.csv"
-
 type WordPair struct {
 	English string
 	Spanish string
 }
+
+const globPath string = "../data/manually-curated/*.csv"
+
+var FolderData = make([]WordPair, 0)
+var SpanishToEnglish = make(map[string][]string)
+var EnglishToSpanish = make(map[string][]string)
 
 func check(e error) {
 	if e != nil {
@@ -39,46 +43,13 @@ func LoadFiles() int64 {
 	return number_of_words
 }
 
-func ListFiles() {
-	// Print a list of files that tests use.
-	allFiles, err := filepath.Glob(globPath)
-	check(err)
-	fmt.Println("------------------------------------")
-	for _, filepath := range allFiles {
-		fmt.Println(formatFilename(filepath))
-	}
-	fmt.Println("------------------------------------")
-}
-
 func formatFilename(file_path string) string {
 	parts := strings.Split(file_path, "/")
 	csvfile := parts[len(parts)-1]
 	return csvfile[:len(csvfile)-4]
 }
 
-func ListWords() {
-	// Print a list of words that tests use.
-	allFiles, err := filepath.Glob(globPath)
-	check(err)
-	fmt.Println("------------------------------------")
-	count := 1
-	for _, filepath := range allFiles {
-		file, err := os.Open(filepath)
-		check(err)
-		defer file.Close()
-
-		lines, err := csv.NewReader(file).ReadAll()
-		check(err)
-		for _, line := range lines {
-			fmt.Println(count, line[0], "==", line[1])
-			count = count + 1
-		}
-	}
-	fmt.Println("------------------------------------")
-}
-
-func GetWords() []WordPair {
-	var word_list []WordPair
+func GetWords() {
 	allFiles, err := filepath.Glob(globPath)
 	check(err)
 	fmt.Println("------------------------------------")
@@ -90,8 +61,20 @@ func GetWords() []WordPair {
 		lines, err := csv.NewReader(file).ReadAll()
 		check(err)
 		for _, line := range lines {
-			word_list = append(word_list, WordPair{line[0], line[1][1:]})
+			EnglishWord := line[0]
+			SpanishWord := line[1][1:]
+
+			if SpanishToEnglish[SpanishWord] == nil {
+				SpanishToEnglish[SpanishWord] = []string{EnglishWord}
+			} else {
+				SpanishToEnglish[SpanishWord] = append(SpanishToEnglish[SpanishWord], EnglishWord)
+			}
+
+			if EnglishToSpanish[EnglishWord] == nil {
+				EnglishToSpanish[EnglishWord] = []string{SpanishWord}
+			} else {
+				EnglishToSpanish[EnglishWord] = append(EnglishToSpanish[EnglishWord], SpanishWord)
+			}
 		}
 	}
-	return word_list
 }

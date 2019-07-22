@@ -13,13 +13,10 @@ func main() {
 	number_of_words := file_operations.LoadFiles()
 	fmt.Println("I have", number_of_words, "words!")
 	language_test.SeedWithTime()
+	file_operations.GetWords()
 	var command string
 	for command != "exit" {
 		switch command = cli.GetCommand(cli.Stdin, cli.Stdout); command {
-		case "list files":
-			file_operations.ListFiles()
-		case "list words":
-			file_operations.ListWords()
 		case "train spanish":
 			language_test.TestSpanish()
 		case "train english":
