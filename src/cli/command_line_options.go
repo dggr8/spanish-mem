@@ -46,7 +46,7 @@ func GetInt(rd io.Reader, wr io.Writer, question string) (number int) {
 	for {
 		fmt.Fprint(wr, question, "->")
 		_, err := fmt.Fscanf(rd, "%d", &number)
-		if err == nil && number > 0 {
+		if err == nil && number >= 0 {
 			return
 		}
 	}

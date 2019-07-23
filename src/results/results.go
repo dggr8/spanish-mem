@@ -19,7 +19,7 @@ type TestResult struct {
 	Timestamp time.Time `json:"timestamp"`
 }
 
-const ResultFilePath string = "../data/results.json"
+const ResultJsonPath string = "../data/results.json"
 
 func RecordResult(this_result TestResult, result_filepath string) error {
 
