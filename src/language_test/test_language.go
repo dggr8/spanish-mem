@@ -46,7 +46,7 @@ func TestSpanish() {
 		}
 	}
 	fmt.Printf("%v correct out of %v\n", correctAnswers, trainCount)
-	results.RecordResult(results.TestResult{
+	_ = results.RecordResult(results.TestResult{
 		Correct:   correctAnswers,
 		Attempts:  trainCount,
 		Train:     "spanish",
@@ -85,7 +85,7 @@ func TestEnglish() {
 		}
 	}
 	fmt.Printf("%v correct out of %v\n", correctAnswers, trainCount)
-	results.RecordResult(results.TestResult{
+	_ = results.RecordResult(results.TestResult{
 		Correct:   correctAnswers,
 		Attempts:  trainCount,
 		Train:     "english",

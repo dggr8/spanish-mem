@@ -30,9 +30,9 @@ func TestGetCommand(t *testing.T) {
 
 	t.Run("Command is in the list", func(t *testing.T) {
 		Spy := CliSpy{}
-		Spy.reader = strings.NewReader("list files\n")
+		Spy.reader = strings.NewReader("train spanish\n")
 		got := GetCommand(&Spy, &Spy)
-		want := "list files"
+		want := "train spanish"
 		if got != want {
 			t.Errorf("got %q want %q", got, want)
 		}

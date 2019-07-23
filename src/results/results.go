@@ -21,18 +21,20 @@ type TestResult struct {
 
 const ResultFilePath string = "../data/results.json"
 
-func RecordResult(this_result TestResult, result_filepath string) {
+func RecordResult(this_result TestResult, result_filepath string) error {
 
 	jsonFile, err := os.Open(result_filepath)
 	if err != nil {
-		log.Fatal(err)
+		log.Print(err)
+		return err
 	}
 	defer jsonFile.Close()
 
 	byteValue, _ := ioutil.ReadAll(jsonFile)
-	var all_results TestResults
-	json.Unmarshal([]byte(byteValue), &all_results)
-	all_results.TestResults = append(all_results.TestResults, this_result)
-	json_data, _ := json.Marshal(all_results)
-	ioutil.WriteFile(result_filepath, json_data, 0777)
+	var allResults TestResults
+	json.Unmarshal([]byte(byteValue), &allResults)
+	allResults.TestResults = append(allResults.TestResults, this_result)
+	jsonData, _ := json.Marshal(allResults)
+	ioutil.WriteFile(result_filepath, jsonData, 0777)
+	return nil
 }
