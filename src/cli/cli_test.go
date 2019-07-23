@@ -92,24 +92,51 @@ func TestGetAnswer(t *testing.T) {
 
 func TestGetInt(t *testing.T) {
 
-	t.Run("input is not a number", func(t *testing.T) {
+	t.Run("first input is not a number", func(t *testing.T) {
 		Spy := CliSpy{}
-		Spy.reader = strings.NewReader("bs\n")
-		got, err := GetInt(&Spy, &Spy, "Gimme a number")
+		Spy.reader = strings.NewReader("b\n23")
+		got := GetInt(&Spy, &Spy, "Gimme a number")
 
-		want := 0
+		want := 23
 		if got != want {
 			t.Errorf("got %d want %d", got, want)
-		}
-
-		errExpected := "expected integer"
-		if err.Error() != errExpected {
-			t.Errorf("got error %q wanted %q", err.Error(), errExpected)
 		}
 
 		gotCalls := Spy.Calls
 		wantCalls := []string{
 			write,
+			read,
+			write,
+			read,
+			write,
+			read,
+			read,
+			read,
+		}
+		if !reflect.DeepEqual(gotCalls, wantCalls) {
+			t.Errorf("wanted calls %v got %v", wantCalls, gotCalls)
+		}
+
+		gotPrint := Spy.Prints
+		expectedPrint := strings.Repeat("Gimme a number->", 3)
+		if gotPrint != expectedPrint {
+			t.Errorf("got %q wanted %q", gotPrint, expectedPrint)
+		}
+	})
+
+	t.Run("valid input", func(t *testing.T) {
+		Spy := CliSpy{}
+		Spy.reader = strings.NewReader("23\n")
+		got := GetInt(&Spy, &Spy, "Gimme a number")
+		want := 23
+		if got != want {
+			t.Errorf("got %d want %d", got, want)
+		}
+		gotCalls := Spy.Calls
+		wantCalls := []string{
+			write,
+			read,
+			read,
 			read,
 		}
 		if !reflect.DeepEqual(gotCalls, wantCalls) {
@@ -121,18 +148,6 @@ func TestGetInt(t *testing.T) {
 		if gotPrint != expectedPrint {
 			t.Errorf("got %q wanted %q", gotPrint, expectedPrint)
 		}
-	})
 
-	t.Run("valid input", func(t *testing.T) {
-		Spy := CliSpy{}
-		Spy.reader = strings.NewReader("23\n")
-		got, err := GetInt(&Spy, &Spy, "Gimme a number")
-		want := 23
-		if got != want {
-			t.Errorf("got %d want %d", got, want)
-		}
-		if err != nil {
-			t.Errorf("expected no error but got %q", err.Error())
-		}
 	})
 }

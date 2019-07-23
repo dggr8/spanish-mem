@@ -17,12 +17,8 @@ func SeedWithTime() {
 
 func TestSpanish() {
 	correctAnswers := 0
-	trainCount, err := cli.GetInt(
+	trainCount := cli.GetInt(
 		cli.Stdin, cli.Stdout, "How many words do you want to train")
-	for err != nil || trainCount <= 0 {
-		trainCount, err = cli.GetInt(
-			cli.Stdin, cli.Stdout, "Oops.How many words do you want to train")
-	}
 	LoopCtr := trainCount
 
 	fmt.Println("Translate these words to spanish:")
@@ -56,12 +52,8 @@ func TestSpanish() {
 
 func TestEnglish() {
 	correctAnswers := 0
-	trainCount, err := cli.GetInt(
+	trainCount := cli.GetInt(
 		cli.Stdin, cli.Stdout, "How many words do you want to train")
-	for err != nil {
-		trainCount, err = cli.GetInt(
-			cli.Stdin, cli.Stdout, "Oops.How many words do you want to train")
-	}
 	LoopCtr := trainCount
 
 	fmt.Println("Translate these words to english:")

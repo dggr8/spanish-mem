@@ -42,12 +42,12 @@ func GetAnswer(rd io.Reader, wr io.Writer, question string) string {
 	return text
 }
 
-func GetInt(rd io.Reader, wr io.Writer, question string) (int, error) {
-	fmt.Fprint(wr, question, "->")
-	var number int
-	_, err := fmt.Fscanf(rd, "%d", &number)
-	if err != nil {
-		return 0, err
+func GetInt(rd io.Reader, wr io.Writer, question string) (number int) {
+	for {
+		fmt.Fprint(wr, question, "->")
+		_, err := fmt.Fscanf(rd, "%d", &number)
+		if err == nil && number > 0 {
+			return
+		}
 	}
-	return number, nil
 }
