@@ -37,7 +37,7 @@ cow, la bufala`)
 	SpanishToEnglishExpected := map[string][]string{
 		"bien":      []string{"good"},
 		"la vaca":   []string{"cow"},
-		"la bufala": []string{"cow", "buffalo"},
+		"la bufala": []string{"buffalo", "cow"},
 	}
 	if !reflect.DeepEqual(SpanishToEnglish, SpanishToEnglishExpected) {
 		t.Errorf("got %v want %v", SpanishToEnglish, SpanishToEnglishExpected)

@@ -2,8 +2,8 @@ package results
 
 import (
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
+	"log"
 	"os"
 	"time"
 )
@@ -25,7 +25,7 @@ func RecordResult(this_result TestResult, result_filepath string) {
 
 	jsonFile, err := os.Open(result_filepath)
 	if err != nil {
-		fmt.Println(err)
+		log.Fatal(err)
 	}
 	defer jsonFile.Close()
 
