@@ -1,3 +1,4 @@
+// Package language provides functions to test between languages.
 package language
 
 import (
@@ -7,26 +8,33 @@ import (
 
 	"github.com/agnivade/levenshtein"
 	"github.com/dggr8/spanish-mem/src/cli"
-	"github.com/dggr8/spanish-mem/src/file_operations"
+	"github.com/dggr8/spanish-mem/src/fileops"
 	"github.com/dggr8/spanish-mem/src/results"
 )
 
-func TestSpanish(rd io.Reader, wr io.Writer, resultJsonPath string) {
+// TestSpanish tests the user's ability to translate from English to Spanish.
+// It takes in io.Reader, io.Writer and the path to the results.json file.
+func TestSpanish(rd io.Reader, wr io.Writer, resultJSONPath string) {
 	trainCount := cli.GetInt(rd, wr, "How many words do you want to train")
 
 	fmt.Fprintln(wr, "Translate these words to spanish:")
-	TestLanguage(rd, wr, file_operations.EnglishToSpanish, trainCount, "spanish", resultJsonPath)
+	TestLanguage(rd, wr, fileops.EnglishToSpanish, trainCount, "spanish", resultJSONPath)
 }
 
-func TestEnglish(rd io.Reader, wr io.Writer, resultJsonPath string) {
+// TestEnglish tests the user's ability to translate Spanish to English.
+// It takes in io.Reader, io.Writer and the path to the results.json file.
+func TestEnglish(rd io.Reader, wr io.Writer, resultJSONPath string) {
 	trainCount := cli.GetInt(rd, wr, "How many words do you want to train")
 
 	fmt.Fprintln(wr, "Translate these words to english:")
-	TestLanguage(rd, wr, file_operations.SpanishToEnglish, trainCount, "english", resultJsonPath)
+	TestLanguage(rd, wr, fileops.SpanishToEnglish, trainCount, "english", resultJSONPath)
 }
 
+// TestLanguage provides a generic function to test conversion between two languages.
+// It takes in a map[string][]string as database to test on, number of conversions to test and
+// string tag to be added into the result.
 func TestLanguage(rd io.Reader, wr io.Writer, LanguageMap map[string][]string,
-	trainCount int, languageStr string, resultJsonPath string) {
+	trainCount int, languageStr string, resultJSONPath string) {
 	correctAnswers := 0
 	LoopCtr := trainCount
 	if trainCount <= 0 {
@@ -59,9 +67,11 @@ func TestLanguage(rd io.Reader, wr io.Writer, LanguageMap map[string][]string,
 		Attempts:  trainCount,
 		Train:     languageStr,
 		Timestamp: time.Now(),
-	}, resultJsonPath)
+	}, resultJSONPath)
 }
 
+// MinDistance finds the least levenshtein distance between the word and all the
+// words in comparingWords.
 func MinDistance(word string, comparingWords []string) (min int) {
 	min = len(word)
 	for _, compareWord := range comparingWords {

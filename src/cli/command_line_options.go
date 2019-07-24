@@ -8,25 +8,28 @@ import (
 	"strings"
 )
 
+// Stdin and Stdout are global variables to access os counterparts.
 var (
 	Stdin  = os.Stdin
 	Stdout = os.Stdout
 )
 
-var list_of_commands = map[string]bool{
+var listOfCommands = map[string]bool{
 	"train spanish": true,
 	"train english": true,
 	"print results": true,
 	"exit":          true,
 }
 
+// GetCommand asks the user what they want to do and returns the command
+// as a string. If the command isn't in listOfCommands, the user is prompted again.
 func GetCommand(rd io.Reader, wr io.Writer) string {
 	fmt.Fprintln(wr, "What do you want to do now?")
 	fmt.Fprint(wr, ">")
 	reader := bufio.NewReader(rd)
 	text, _ := reader.ReadString('\n')
 	text = strings.Replace(text, "\n", "", -1)
-	if list_of_commands[text] == true {
+	if listOfCommands[text] == true {
 		return text
 	} else {
 		fmt.Fprintln(wr, "I'm sorry. I didn't get that.")
@@ -34,6 +37,8 @@ func GetCommand(rd io.Reader, wr io.Writer) string {
 	}
 }
 
+// GetAnswer asks the user for the answer to an input question and returns the answer
+// as a string.
 func GetAnswer(rd io.Reader, wr io.Writer, question string) string {
 	fmt.Fprint(wr, question, "->")
 	reader := bufio.NewReader(rd)
@@ -42,6 +47,7 @@ func GetAnswer(rd io.Reader, wr io.Writer, question string) string {
 	return text
 }
 
+// GetInt asks the user an input question and returns an integer.
 func GetInt(rd io.Reader, wr io.Writer, question string) (number int) {
 	for {
 		fmt.Fprint(wr, question, "->")
