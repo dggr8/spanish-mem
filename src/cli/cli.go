@@ -38,10 +38,9 @@ func GetCommand(rd io.Reader, wr io.Writer) string {
 	text = strings.Replace(text, "\n", "", -1)
 	if listOfCommands[text] == true {
 		return text
-	} else {
-		fmt.Fprintln(wr, "I'm sorry. I didn't get that.")
-		return ""
 	}
+	fmt.Fprintln(wr, "I'm sorry. I didn't get that.")
+	return ""
 }
 
 // GetAnswer asks the user for the answer to an input question and returns the answer

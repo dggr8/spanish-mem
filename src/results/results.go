@@ -36,7 +36,7 @@ func RecordResult(thisResult TestResult, resultFilePath string) error {
 	defer jsonFile.Close()
 
 	byteValue, _ := ioutil.ReadAll(jsonFile)
-	var allResults TestResults
+	allResults := TestResults{}
 	json.Unmarshal([]byte(byteValue), &allResults)
 	allResults.TestResults = append(allResults.TestResults, thisResult)
 	jsonData, _ := json.Marshal(allResults)
