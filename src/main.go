@@ -14,7 +14,7 @@ func main() {
 	for command != "exit" {
 		switch command = cli.GetCommand(cli.Stdin, cli.Stdout); command {
 		case "switch dirs":
-			fileops.SwitchFolders(fileops.ParentPath)
+			fileops.SwitchFolders(cli.Stdin, cli.Stdout, fileops.ParentPath)
 		case "train spanish":
 			language.TestSpanish(cli.Stdin, cli.Stdout, results.ResultJSONPath)
 		case "train english":

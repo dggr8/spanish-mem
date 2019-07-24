@@ -3,7 +3,7 @@ package fileops
 
 import (
 	"encoding/csv"
-	"fmt"
+	"io"
 	"io/ioutil"
 	"os"
 	"path/filepath"
@@ -27,9 +27,7 @@ func check(e error) {
 	}
 }
 
-func SwitchFolders(parentPath string) {
-	SpanishToEnglish = make(map[string][]string)
-	EnglishToSpanish = make(map[string][]string)
+func SwitchFolders(rd io.Reader, wr io.Writer, parentPath string) {
 
 	allFileInfos, err := ioutil.ReadDir(parentPath)
 	if err != nil {
@@ -42,14 +40,16 @@ func SwitchFolders(parentPath string) {
 		}
 	}
 
-	chosenDir := cli.GetDirChoice(cli.Stdin, cli.Stdout, listOfDirs)
-	fmt.Printf("You chose %q\n", parentPath+chosenDir)
-	GetWords(parentPath + chosenDir + "/*.csv")
+	chosenDir := cli.GetDirChoice(rd, wr, listOfDirs)
+	GetWords(parentPath + "/" + chosenDir + "/*.csv")
 }
 
 // GetWords loads csv files from the globPath and populates SpanishToEnglish and
 // EnglishToSpanish maps.
 func GetWords(globPath string) {
+
+	SpanishToEnglish = make(map[string][]string)
+	EnglishToSpanish = make(map[string][]string)
 	allFiles, err := filepath.Glob(globPath)
 	check(err)
 	for _, filepath := range allFiles {
@@ -76,7 +76,4 @@ func GetWords(globPath string) {
 			}
 		}
 	}
-
-	fmt.Printf("English -> Spanish %d words\n", len(EnglishToSpanish))
-	fmt.Printf("Spanish -> English %d words\n", len(SpanishToEnglish))
 }

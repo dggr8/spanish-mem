@@ -151,3 +151,42 @@ func TestGetInt(t *testing.T) {
 
 	})
 }
+
+func TestGetDirChoice(t *testing.T) {
+	// Because GetDirChoice uses termbox, extensive testing is impossible.
+	listOfStrings := []string{"only one"}
+	spy := CliSpy{}
+	got := GetDirChoice(&spy, &spy, listOfStrings)
+	want := "only one"
+	if got != want {
+		t.Errorf("got %q want %q", got, want)
+	}
+
+	wantCalls := []string{
+		write,
+	}
+	if !reflect.DeepEqual(spy.Calls, wantCalls) {
+		t.Errorf("wanted calls %v got %v", wantCalls, spy.Calls)
+	}
+}
+
+func TestPrintList(t *testing.T) {
+
+	t.Run("pos out of range", func(t *testing.T) {
+		listOfStrings := []string{"a", "b"}
+		err := printList(Stdout, listOfStrings, -1)
+		want := "pos is out of range"
+		if err.Error() != want {
+			t.Errorf("got %q want %q", err.Error(), want)
+		}
+	})
+
+	t.Run("normal function", func(t *testing.T) {
+		listOfStrings := []string{"a", "b"}
+		err := printList(Stdout, listOfStrings, 1)
+		if err != nil {
+			t.Errorf("wanted no err got %q", err.Error())
+		}
+	})
+
+}

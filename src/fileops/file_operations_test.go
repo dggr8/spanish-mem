@@ -7,7 +7,28 @@ import (
 	"path/filepath"
 	"reflect"
 	"testing"
+
+	"github.com/dggr8/spanish-mem/src/cli"
 )
+
+func TestSwitchFolders(t *testing.T) {
+	parentDir, _ := ioutil.TempDir("", "example")
+	childDir, _ := ioutil.TempDir(parentDir, "example")
+	content := []byte(`good, bien`)
+	if err := ioutil.WriteFile(childDir+"/some.csv", content, 0666); err != nil {
+		log.Fatal(err)
+	}
+	defer os.RemoveAll(parentDir) // clean up
+
+	SwitchFolders(cli.Stdin, cli.Stdout, parentDir)
+	EnglishToSpanishExpected := map[string][]string{
+		"good": []string{"bien"},
+	}
+
+	if !reflect.DeepEqual(EnglishToSpanish, EnglishToSpanishExpected) {
+		t.Errorf("got %v want %v\n", EnglishToSpanish, EnglishToSpanishExpected)
+	}
+}
 
 func TestGetWords(t *testing.T) {
 	content := []byte(`good, bien
