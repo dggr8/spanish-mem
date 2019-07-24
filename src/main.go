@@ -13,6 +13,8 @@ func main() {
 	var command string
 	for command != "exit" {
 		switch command = cli.GetCommand(cli.Stdin, cli.Stdout); command {
+		case "switch dirs":
+			fileops.SwitchFolders(fileops.ParentPath)
 		case "train spanish":
 			language.TestSpanish(cli.Stdin, cli.Stdout, results.ResultJSONPath)
 		case "train english":
