@@ -19,6 +19,8 @@ func main() {
 			language.TestSpanish(cli.Stdin, cli.Stdout, results.ResultJSONPath)
 		case "train english":
 			language.TestEnglish(cli.Stdin, cli.Stdout, results.ResultJSONPath)
+		case "print results":
+			results.PrintResults(cli.Stdout, results.ResultJSONPath)
 		}
 	}
 }

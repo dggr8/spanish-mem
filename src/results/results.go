@@ -2,10 +2,14 @@ package results
 
 import (
 	"encoding/json"
+	"io"
 	"io/ioutil"
 	"log"
 	"os"
+	"strconv"
 	"time"
+
+	"github.com/olekukonko/tablewriter"
 )
 
 // TestResults is a struct of an array of TestResult.
@@ -42,4 +46,56 @@ func RecordResult(thisResult TestResult, resultFilePath string) error {
 	jsonData, _ := json.Marshal(allResults)
 	ioutil.WriteFile(resultFilePath, jsonData, 0777)
 	return nil
+}
+
+// PrintableResult stores the values of a row in the table printed.
+type PrintableResult struct {
+	Train     string
+	Accuracy  float64
+	TestCount int
+}
+
+// PrintResults displays the historical results for the user.
+func PrintResults(wr io.Writer, resultFilePath string) error {
+
+	jsonFile, err := os.Open(resultFilePath)
+	if err != nil {
+		return err
+	}
+	defer jsonFile.Close()
+
+	byteValue, _ := ioutil.ReadAll(jsonFile)
+	allResults := TestResults{}
+	json.Unmarshal([]byte(byteValue), &allResults)
+
+	var englishAccurate, spanishAccurate, englishTotal, spanishTotal int64
+	for _, result := range allResults.TestResults {
+		if result.Train == "english" {
+			englishAccurate += int64(result.Correct)
+			englishTotal += int64(result.Attempts)
+		}
+		if result.Train == "spanish" {
+			spanishAccurate += int64(result.Correct)
+			spanishTotal += int64(result.Attempts)
+		}
+	}
+
+	table := [][]string{
+		[]string{"spanish", strconv.FormatInt(spanishTotal, 10),
+			strconv.FormatFloat(float64(spanishAccurate)/(float64(spanishTotal)+0.001), 'g', -1, 32)},
+		[]string{"english", strconv.FormatInt(englishTotal, 10),
+			strconv.FormatFloat(float64(englishAccurate)/(float64(englishTotal)+0.001), 'g', -1, 32)},
+	}
+	header := []string{
+		"Language", "Total tested", "Accuracy",
+	}
+	printTable(wr, header, table)
+	return nil
+}
+
+func printTable(wr io.Writer, header []string, table [][]string) {
+	newTableWriter := tablewriter.NewWriter(wr)
+	newTableWriter.SetHeader(header)
+	newTableWriter.AppendBulk(table)
+	newTableWriter.Render()
 }
