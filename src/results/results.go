@@ -1,3 +1,4 @@
+// Package results provides functions to save and view results.
 package results
 
 import (
