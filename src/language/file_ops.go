@@ -1,5 +1,4 @@
-// Package file_operations loads the maps of translations.
-package fileops
+package language
 
 import (
 	"encoding/csv"
@@ -7,8 +6,6 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
-
-	"github.com/dggr8/spanish-mem/src/cli"
 )
 
 // GlobPath is a link to the csv files.
@@ -27,6 +24,7 @@ func check(e error) {
 	}
 }
 
+// SwitchFolders allows users to switch between testing different directories.
 func SwitchFolders(rd io.Reader, wr io.Writer, parentPath string) {
 
 	allFileInfos, err := ioutil.ReadDir(parentPath)
@@ -40,7 +38,7 @@ func SwitchFolders(rd io.Reader, wr io.Writer, parentPath string) {
 		}
 	}
 
-	chosenDir := cli.GetDirChoice(rd, wr, listOfDirs)
+	chosenDir := GetDirChoice(rd, wr, listOfDirs)
 	GetWords(parentPath + "/" + chosenDir + "/*.csv")
 }
 

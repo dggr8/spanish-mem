@@ -1,26 +1,23 @@
 package main
 
 import (
-	"github.com/dggr8/spanish-mem/src/cli"
-	"github.com/dggr8/spanish-mem/src/fileops"
 	"github.com/dggr8/spanish-mem/src/language"
-	"github.com/dggr8/spanish-mem/src/results"
 )
 
 func main() {
 	// Get all the data files.
-	fileops.GetWords(fileops.GlobPath)
+	language.GetWords(language.GlobPath)
 	var command string
 	for command != "exit" {
-		switch command = cli.GetCommand(cli.Stdin, cli.Stdout); command {
+		switch command = language.GetCommand(language.Stdin, language.Stdout); command {
 		case "switch dirs":
-			fileops.SwitchFolders(cli.Stdin, cli.Stdout, fileops.ParentPath)
+			language.SwitchFolders(language.Stdin, language.Stdout, language.ParentPath)
 		case "train spanish":
-			language.TestSpanish(cli.Stdin, cli.Stdout, results.ResultJSONPath)
+			language.TestSpanish(language.Stdin, language.Stdout, language.ResultJSONPath)
 		case "train english":
-			language.TestEnglish(cli.Stdin, cli.Stdout, results.ResultJSONPath)
+			language.TestEnglish(language.Stdin, language.Stdout, language.ResultJSONPath)
 		case "print results":
-			results.PrintResults(cli.Stdout, results.ResultJSONPath)
+			language.PrintResults(language.Stdout, language.ResultJSONPath)
 		}
 	}
 }
