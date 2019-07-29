@@ -1,5 +1,5 @@
 // Package cli provides functions to ask for and recieve user inputs.
-package cli
+package language
 
 import (
 	"bufio"

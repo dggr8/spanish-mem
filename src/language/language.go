@@ -7,27 +7,24 @@ import (
 	"time"
 
 	"github.com/agnivade/levenshtein"
-	"github.com/dggr8/spanish-mem/src/cli"
-	"github.com/dggr8/spanish-mem/src/fileops"
-	"github.com/dggr8/spanish-mem/src/results"
 )
 
 // TestSpanish tests the user's ability to translate from English to Spanish.
 // It takes in io.Reader, io.Writer and the path to the results.json file.
 func TestSpanish(rd io.Reader, wr io.Writer, resultJSONPath string) {
-	trainCount := cli.GetInt(rd, wr, "How many words do you want to train")
+	trainCount := GetInt(rd, wr, "How many words do you want to train")
 
 	fmt.Fprintln(wr, "Translate these words to spanish:")
-	TestLanguage(rd, wr, fileops.EnglishToSpanish, trainCount, "spanish", resultJSONPath)
+	TestLanguage(rd, wr, EnglishToSpanish, trainCount, "spanish", resultJSONPath)
 }
 
 // TestEnglish tests the user's ability to translate Spanish to English.
 // It takes in io.Reader, io.Writer and the path to the results.json file.
 func TestEnglish(rd io.Reader, wr io.Writer, resultJSONPath string) {
-	trainCount := cli.GetInt(rd, wr, "How many words do you want to train")
+	trainCount := GetInt(rd, wr, "How many words do you want to train")
 
 	fmt.Fprintln(wr, "Translate these words to english:")
-	TestLanguage(rd, wr, fileops.SpanishToEnglish, trainCount, "english", resultJSONPath)
+	TestLanguage(rd, wr, SpanishToEnglish, trainCount, "english", resultJSONPath)
 }
 
 // TestLanguage provides a generic function to test conversion between two languages.
@@ -42,7 +39,7 @@ func TestLanguage(rd io.Reader, wr io.Writer, LanguageMap map[string][]string,
 	}
 
 	for originalWord, translatedWords := range LanguageMap {
-		answer := cli.GetAnswer(rd, wr, originalWord)
+		answer := GetAnswer(rd, wr, originalWord)
 		if answer == "" {
 			fmt.Fprintf(wr, "It is one of \"%v\".\n", translatedWords)
 			continue
@@ -62,7 +59,7 @@ func TestLanguage(rd io.Reader, wr io.Writer, LanguageMap map[string][]string,
 	}
 
 	fmt.Fprintf(wr, "%v correct out of %v\n", correctAnswers, trainCount)
-	_ = results.RecordResult(results.TestResult{
+	_ = RecordResult(TestResult{
 		Correct:   correctAnswers,
 		Attempts:  trainCount,
 		Train:     languageStr,

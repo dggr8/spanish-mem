@@ -1,5 +1,5 @@
 // Package results provides functions to save and view results.
-package results
+package language
 
 import (
 	"encoding/json"

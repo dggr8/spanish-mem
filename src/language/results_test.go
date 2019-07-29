@@ -1,4 +1,4 @@
-package results
+package language
 
 import (
 	"io/ioutil"
@@ -8,8 +8,6 @@ import (
 	"strings"
 	"testing"
 	"time"
-
-	"github.com/dggr8/spanish-mem/src/cli"
 )
 
 func TestRecordResult(t *testing.T) {
@@ -70,14 +68,6 @@ func TestRecordResult(t *testing.T) {
 	})
 }
 
-type CliSpy struct {
-	Prints string
-}
-
-func (s *CliSpy) Write(b []byte) (n int, err error) {
-	s.Prints = s.Prints + string(b)
-	return
-}
 func TestPrintResults(t *testing.T) {
 
 	t.Run("File exists", func(t *testing.T) {
@@ -117,7 +107,7 @@ func TestPrintResults(t *testing.T) {
 		defer os.RemoveAll(dir)
 
 		fakeFile := dir + "fake.csv"
-		gotErr := PrintResults(cli.Stdout, fakeFile)
+		gotErr := PrintResults(Stdout, fakeFile)
 
 		if gotErr == nil {
 			t.Error("Wanted error but got none.")

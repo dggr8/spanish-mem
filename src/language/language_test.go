@@ -9,28 +9,8 @@ import (
 	"testing"
 )
 
-const write = "write"
-const read = "read"
-
-type IoSpy struct {
-	reader *strings.Reader
-	Calls  []string
-	Prints string
-}
-
-func (s *IoSpy) Write(b []byte) (n int, err error) {
-	s.Calls = append(s.Calls, write)
-	s.Prints = s.Prints + string(b)
-	return
-}
-
-func (s *IoSpy) Read(b []byte) (n int, err error) {
-	s.Calls = append(s.Calls, read)
-	return s.reader.Read(b)
-}
-
 func TestTestSpanish(t *testing.T) {
-	spy := IoSpy{}
+	spy := CliSpy{}
 	spy.reader = strings.NewReader("0\n")
 	TestSpanish(&spy, &spy, "")
 	expectedCalls := []string{
@@ -50,7 +30,7 @@ func TestTestSpanish(t *testing.T) {
 }
 
 func TestTestEnglish(t *testing.T) {
-	spy := IoSpy{}
+	spy := CliSpy{}
 	spy.reader = strings.NewReader("0\n")
 	TestEnglish(&spy, &spy, "")
 	expectedCalls := []string{
@@ -72,7 +52,7 @@ func TestTestEnglish(t *testing.T) {
 func TestTestLanguage(t *testing.T) {
 
 	t.Run("trainCount is zero", func(t *testing.T) {
-		spy := IoSpy{}
+		spy := CliSpy{}
 		spy.reader = strings.NewReader("")
 		TestLanguage(&spy, &spy, nil, 0, "", "")
 
@@ -87,7 +67,7 @@ func TestTestLanguage(t *testing.T) {
 			log.Fatal(err)
 		}
 		defer os.Remove(tmpfile.Name())
-		spy := IoSpy{}
+		spy := CliSpy{}
 		spy.reader = strings.NewReader("home\n")
 
 		languageMap := map[string][]string{
@@ -127,7 +107,7 @@ func TestTestLanguage(t *testing.T) {
 			log.Fatal(err)
 		}
 		defer os.Remove(tmpfile.Name())
-		spy := IoSpy{}
+		spy := CliSpy{}
 		spy.reader = strings.NewReader("\nhome\n")
 
 		languageMap := map[string][]string{
@@ -167,7 +147,7 @@ func TestTestLanguage(t *testing.T) {
 			log.Fatal(err)
 		}
 		defer os.Remove(tmpfile.Name())
-		spy := IoSpy{}
+		spy := CliSpy{}
 		spy.reader = strings.NewReader("home\n")
 
 		languageMap := map[string][]string{

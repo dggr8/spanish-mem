@@ -1,4 +1,4 @@
-package fileops
+package language
 
 import (
 	"io/ioutil"
@@ -7,8 +7,6 @@ import (
 	"path/filepath"
 	"reflect"
 	"testing"
-
-	"github.com/dggr8/spanish-mem/src/cli"
 )
 
 func TestSwitchFolders(t *testing.T) {
@@ -20,7 +18,7 @@ func TestSwitchFolders(t *testing.T) {
 	}
 	defer os.RemoveAll(parentDir) // clean up
 
-	SwitchFolders(cli.Stdin, cli.Stdout, parentDir)
+	SwitchFolders(Stdin, Stdout, parentDir)
 	EnglishToSpanishExpected := map[string][]string{
 		"good": []string{"bien"},
 	}
