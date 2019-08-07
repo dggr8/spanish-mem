@@ -1,6 +1,6 @@
-// Package cli provides functions to ask for and recieve user inputs.
 package language
 
+// cli provides functions to ask for and recieve user inputs.
 import (
 	"bufio"
 	"errors"

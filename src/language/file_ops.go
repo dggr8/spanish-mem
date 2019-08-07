@@ -15,8 +15,10 @@ const GlobPath string = "../data/manually-curated/*.csv"
 const ParentPath string = "../data/"
 
 // SpanishToEnglish and EnglishToSpanish maps are picked up by the testing packages.
-var SpanishToEnglish = make(map[string][]string)
-var EnglishToSpanish = make(map[string][]string)
+var (
+	SpanishToEnglish = make(map[string][]string)
+	EnglishToSpanish = make(map[string][]string)
+)
 
 func check(e error) {
 	if e != nil {

@@ -1,5 +1,6 @@
-// Package results provides functions to save and view results.
 package language
+
+// results provides functions to save and view results.
 
 import (
 	"encoding/json"
